@@ -8,12 +8,12 @@ task "tools:remove_child_theme", [:parent, :child] => [:environment] do |_, args
   Tools.remove_child_theme(args[:parent], args[:child])
 end
 
-desc "Disable users except member of group"
+desc "Disable users except member of group; till='Y-m-d H:I:S'"
 task "tools:disable_users", [:group, :till] => [:environment] do |_, args|
   date, time = args[:till].split(" ")
 
   date = date.split("-")
-  time = time.split(":")
+  time = time&.split(":") || []
 
   Tools.disable_users_except_group(args[:group], Time.new(*date, *time))
 end
