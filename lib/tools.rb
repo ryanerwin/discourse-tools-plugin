@@ -6,6 +6,34 @@ module Tools
     def add_child_theme(*args)
       parent, child = args.map { |theme_name| find_theme(theme_name) }
 
+      if Discourse::VERSION::MAJOR == 2 && Discourse::VERSION::MINOR >= 2
+        if parent.component
+          help_msg = "#{parent.name} is a component. Would you like to convert it into a theme? (Y/n): "
+
+          convert_theme?(help_msg) do |answer|
+            if answer != "y"
+              puts "Aborted."
+              return
+            else
+              parent.switch_to_theme!
+            end
+          end
+        end
+
+        unless child.component
+          help_msg = "#{child.name} is not a component. Would you like to convert it into a component? (Y/n): "
+
+          convert_theme?(help_msg) do |answer|
+            if answer != "y"
+              puts "Aborted."
+              return
+            else
+              child.switch_to_component!
+            end
+          end
+        end
+      end
+
       child_ids = parent.child_theme_relation.pluck(:child_theme_id)
 
       if !child_ids.include?(child.id)
@@ -71,6 +99,14 @@ module Tools
       Theme.find_by(name: theme_name)
     end
 
+    def convert_theme?(str, &block)
+      $stdout.print str
+      answer = $stdin.gets.chomp
+      answer.downcase!
+      answer = "y" if answer.blank?
+
+      yield answer
+    end
   end
 
 end
