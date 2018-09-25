@@ -1,5 +1,5 @@
 # name: tools
-# version: 0.2
+# version: 0.2.1
 # author: Muhlis Budi Cahyono
 # url: https://github.com/ryanerwin/discourse-tools-plugin
 
