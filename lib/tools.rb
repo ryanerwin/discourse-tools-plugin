@@ -100,6 +100,11 @@ module Tools
     end
 
     def convert_theme?(str, &block)
+      if ENV["force"] == "true"
+        yield "y"
+        return
+      end
+
       $stdout.print str
       answer = $stdin.gets.chomp
       answer.downcase!
