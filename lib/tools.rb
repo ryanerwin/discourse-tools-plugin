@@ -6,7 +6,7 @@ module Tools
     def add_child_theme(*args)
       parent, child = args.map { |theme_name| find_theme(theme_name) }
 
-      if Discourse::VERSION::MAJOR == 2 && Discourse::VERSION::MINOR >= 2
+      if Discourse::VERSION::MAJOR == 2 && Discourse::VERSION::MINOR >= 1
         if parent.component
           help_msg = "#{parent.name} is a component. Would you like to convert it into a theme? (Y/n): "
 
